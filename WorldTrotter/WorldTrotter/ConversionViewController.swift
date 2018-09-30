@@ -12,6 +12,7 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet var celsiousLabel: UILabel!
     @IBOutlet var textField: UITextField!   // for keyboard disappear
+    @IBOutlet var textLabel: UILabel!   // for dark mode
     
     @IBAction func fahrenheitFieldEditingChanged(textField: UITextField) {
         if let text = textField.text, let value = Double(text) {
@@ -23,6 +24,28 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
     }
     @IBAction func dismissKeyboard(sender: AnyObject) {
         textField.resignFirstResponder()
+    }
+    
+    override func viewDidLoad() {
+        // super의 viewDidLoad 구현을 항상 호출한다
+        super.viewDidLoad()
+        
+        print("ConversionViewController loaded its view.")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let currenthour: Int
+        let date = Date()
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.hour, .minute, .second], from:date)
+        currenthour = components.hour!
+        //currenthour = 19
+        print("current hour : \(currenthour)")
+        
+        if currenthour >= 18 {
+            self.view.backgroundColor = UIColor.darkGray
+            textLabel.textColor = UIColor.white
+        }
     }
     
     var fahrenheitValue: Double? {  // property observer. property의 값이 바뀔 때 마다 호출됨.
@@ -82,5 +105,4 @@ class ConversionViewController: UIViewController, UITextFieldDelegate {
             return true
         }
     }
-    
 }
